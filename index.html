@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoliDubber — Holistic Video Dubbing for Complex Acoustic Scenes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #FCFCFB;
+            --bg-alt: #F5F4F0;
+            --bg-card: #FFFFFF;
+            --text: #18181B;
+            --text-sec: #52525B;
+            --text-muted: #A1A1AA;
+            --accent: #0F5132;
+            --accent-bg: #E8F5EE;
+            --accent-2: #B45309;
+            --accent-2-bg: #FEF3C7;
+            --border: #E4E4E7;
+            --border-light: #ECECEA;
+            --serif: 'Libre Baskerville', Georgia, serif;
+            --sans: 'Outfit', system-ui, sans-serif;
+            --mono: 'IBM Plex Mono', monospace;
+            --max-w: 980px;
+            --gap: 5rem;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(252,252,251,0.9);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0.65rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo {
+            font-family: var(--serif);
+            font-weight: 700; font-size: 1rem;
+            color: var(--text); text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 1.6rem; }
+        .nav-links a {
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--text-sec); text-decoration: none;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ===== HERO ===== */
+        .hero {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-family: var(--mono);
+            font-size: 0.7rem; font-weight: 500;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--accent); background: var(--accent-bg);
+            padding: 0.3rem 0.85rem; border-radius: 100px;
+            margin-bottom: 1.4rem;
+        }
+        .badge::before {
+            content: ''; display: block;
+            width: 6px; height: 6px;
+            background: var(--accent); border-radius: 50%;
+        }
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: 2.3rem; font-weight: 700;
+            line-height: 1.25; letter-spacing: -0.015em;
+            max-width: 820px; margin: 0 auto 0.6rem;
+        }
+        .hero .subtitle {
+            font-size: 1.05rem; font-weight: 400;
+            color: var(--text-sec);
+            max-width: 620px; margin: 0 auto 2rem;
+        }
+        .hero .authors {
+            font-size: 0.92rem; color: var(--text-sec);
+            line-height: 1.8; margin-bottom: 0.4rem;
+        }
+        .hero .affiliations {
+            font-size: 0.8rem; color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        .links { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+        .links a {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.82rem; font-weight: 600;
+            padding: 0.5rem 1.2rem; border-radius: 6px;
+            text-decoration: none; transition: all 0.2s;
+        }
+        .btn-dark { background: var(--text); color: #fff !important; }
+        .btn-dark:hover { background: #333; }
+        .btn-ghost { background: transparent; color: var(--text) !important; border: 1.5px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--text); }
+
+        /* ===== SECTION ===== */
+        section {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 2rem var(--gap);
+        }
+        .sec-tag {
+            font-family: var(--mono);
+            font-size: 0.66rem; font-weight: 500;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 0.5rem;
+        }
+        section h2 {
+            font-family: var(--serif);
+            font-size: 1.65rem; font-weight: 700;
+            letter-spacing: -0.01em; margin-bottom: 1rem;
+        }
+        section h3 {
+            font-family: var(--serif);
+            font-size: 1.15rem; font-weight: 700;
+            margin: 2rem 0 0.6rem;
+        }
+        section p { color: var(--text-sec); font-size: 0.93rem; max-width: 720px; }
+
+        .divider { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
+        .divider hr { border: none; border-top: 1px solid var(--border-light); }
+
+        /* ===== ABSTRACT ===== */
+        .abstract {
+            background: var(--bg-alt);
+            border-left: 3px solid var(--accent);
+            padding: 1.6rem 1.8rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 0.8rem;
+        }
+        .abstract p { max-width: none; font-size: 0.9rem; line-height: 1.85; }
+
+        /* ===== HIGHLIGHTS ===== */
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem; margin-top: 1.4rem;
+        }
+        .hl-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 1.3rem 1.4rem;
+            transition: box-shadow 0.25s;
+        }
+        .hl-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .hl-num {
+            font-family: var(--mono);
+            font-size: 0.68rem; font-weight: 500;
+            color: var(--accent); background: var(--accent-bg);
+            display: inline-block;
+            padding: 0.15rem 0.5rem; border-radius: 4px;
+            margin-bottom: 0.6rem;
+        }
+        .hl-card h4 {
+            font-family: var(--serif);
+            font-size: 0.98rem; font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+        .hl-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* ===== FIGURE ===== */
+        .figure { margin: 1.8rem 0; text-align: center; }
+        .figure img {
+            max-width: 100%; border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+        .figure figcaption {
+            font-size: 0.8rem; color: var(--text-muted);
+            margin-top: 0.7rem; line-height: 1.65;
+            max-width: 700px; margin-left: auto; margin-right: auto;
+        }
+
+        /* ===== PIPELINE ===== */
+        .pipeline-steps {
+            display: flex; gap: 0; margin: 1.5rem 0;
+            border: 1px solid var(--border-light);
+            border-radius: 10px; overflow: hidden;
+        }
+        .pipe-step {
+            flex: 1; padding: 1.2rem 1rem;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-light);
+            text-align: center;
+        }
+        .pipe-step:last-child { border-right: none; }
+        .pipe-step .step-num {
+            font-family: var(--mono);
+            font-size: 0.65rem; font-weight: 500;
+            color: var(--accent); display: block; margin-bottom: 0.3rem;
+        }
+        .pipe-step h5 {
+            font-size: 0.82rem; font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .pipe-step p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; max-width: none; }
+
+        /* ===== DEMO ===== */
+        .demo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 1.6rem 1.8rem;
+            margin-bottom: 1.6rem;
+        }
+        .demo-header {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin-bottom: 0.8rem; flex-wrap: wrap;
+        }
+        .mode-tag {
+            font-family: var(--mono);
+            font-size: 0.65rem; font-weight: 500;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            padding: 0.2rem 0.55rem; border-radius: 4px;
+        }
+        .tag-zs { background: var(--accent-2-bg); color: var(--accent-2); }
+        .tag-tp { background: #EDE9FE; color: #6D28D9; }
+        .tag-hb { background: #FCE7F3; color: #BE185D; }
+        .demo-id { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+
+        .prompt-block {
+            margin: 0.6rem 0;
+            padding: 0.8rem 1rem;
+            background: var(--bg-alt);
+            border-radius: 6px;
+            font-size: 0.82rem; color: var(--text-sec);
+            line-height: 1.65;
+        }
+        .prompt-block .field {
+            font-family: var(--mono);
+            font-size: 0.7rem; font-weight: 500;
+            color: var(--accent);
+            display: block; margin-bottom: 0.15rem;
+        }
+        .prompt-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem; margin-top: 1rem;
+        }
+        .video-item { text-align: center; }
+        .video-item .vid-label {
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--text); display: block;
+            margin-bottom: 0.35rem;
+        }
+        .video-item .vid-label.ours { color: var(--accent); }
+        .video-item video {
+            width: 100%; border-radius: 6px;
+            border: 1px solid var(--border-light);
+            background: #000;
+        }
+
+        /* ===== BIBTEX ===== */
+        .bib {
+            background: #1C1C1E; color: #C9D1D9;
+            font-family: var(--mono); font-size: 0.76rem;
+            line-height: 1.7; padding: 1.3rem 1.5rem;
+            border-radius: 8px; overflow-x: auto;
+            margin-top: 0.8rem; position: relative;
+        }
+        .bib .copy {
+            position: absolute; top: 0.6rem; right: 0.6rem;
+            background: #333; color: #aaa; border: none;
+            font-family: var(--mono); font-size: 0.68rem;
+            padding: 0.25rem 0.65rem; border-radius: 4px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .bib .copy:hover { background: #444; color: #fff; }
+
+        /* ===== TWO MODES ===== */
+        .modes {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 1rem; margin: 1.5rem 0;
+        }
+        .mode-box {
+            border: 1px solid var(--border-light);
+            border-radius: 10px; padding: 1.3rem 1.4rem;
+            background: var(--bg-card);
+        }
+        .mode-box h4 {
+            font-family: var(--serif);
+            font-size: 0.95rem; font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+        .mode-box p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+        .mode-box .mode-icon {
+            font-size: 1.4rem; margin-bottom: 0.5rem; display: block;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center; padding: 2.5rem 2rem;
+            font-size: 0.76rem; color: var(--text-muted);
+            border-top: 1px solid var(--border-light);
+            margin-top: 2rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 720px) {
+            .hero h1 { font-size: 1.65rem; }
+            .highlights { grid-template-columns: 1fr; }
+            .modes { grid-template-columns: 1fr; }
+            .prompt-fields { grid-template-columns: 1fr; }
+            .video-grid { grid-template-columns: 1fr 1fr; }
+            .pipeline-steps { flex-direction: column; }
+            .pipe-step { border-right: none; border-bottom: 1px solid var(--border-light); }
+            .pipe-step:last-child { border-bottom: none; }
+            .nav-links { gap: 0.8rem; }
+            .nav-links a { font-size: 0.7rem; }
+        }
+
+        /* ===== FADE ===== */
+        .fade { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+        .fade.vis { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="logo"><span>Holi</span>Dubber</a>
+        <div class="nav-links">
+            <a href="#abstract">Abstract</a>
+            <a href="#method">Method</a>
+            <a href="#demos">Demos</a>
+            <a href="#citation">Cite</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="badge">Under Review</div>
+    <h1>HoliDubber: Holistic Video Dubbing for Complex Acoustic Scenes via Text-Guided Audio Synthesis</h1>
+    <p class="subtitle">The first framework that jointly generates speech and sound effects for video dubbing from a single text prompt.</p>
+    <div class="authors">Anonymous Authors</div>
+    <div class="affiliations">Anonymous Institution</div>
+    <div class="links">
+        <a href="#" class="btn-dark">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Paper
+        </a>
+        <a href="#" class="btn-ghost">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            Code (Coming Soon)
+        </a>
+    </div>
+</header>
+
+<div class="divider"><hr></div>
+
+<!-- ABSTRACT -->
+<section id="abstract" class="fade">
+    <div class="sec-tag">Abstract</div>
+    <div class="abstract">
+        <p>
+            While Text-to-Speech and Text-to-Audio generation have each achieved remarkable progress, existing dubbing systems remain confined to isolated speech synthesis without incorporating sound effects and ambient audio. We present <strong>HoliDubber</strong>, the first holistic video dubbing framework that moves beyond speech-only generation by enabling the joint synthesis of speech and sound effects from a single text prompt. HoliDubber adopts a <em>patch-based autoregressive diffusion transformer</em> architecture, where a causal language model autoregressively models aggregated patch embeddings for global temporal structure, and a Diffusion Transformer decoder generates high-fidelity continuous tokens within each patch. Visual features are fused with audio patches via cross-attention to ground speech generation in the speaker's visual articulation dynamics. We further introduce <strong>HoliDub-Bench</strong>, a benchmark with synchronized video-text-audio triplets for holistic dubbing evaluation. Extensive experiments demonstrate that HoliDubber significantly outperforms existing methods in speech quality, synchronization, and speaker similarity, establishing a new paradigm for holistic video dubbing in complex acoustic scenes.
+        </p>
+    </div>
+</section>
+
+<!-- TWO MODES -->
+<section class="fade">
+    <div class="sec-tag">Capabilities</div>
+    <h2>Two Inference Modes</h2>
+    <p>HoliDubber supports flexible dubbing via two complementary modes, enabled by a single unified model with stochastic text-field dropout during training.</p>
+    <div class="modes">
+        <div class="mode-box">
+            <span class="mode-icon">🎙️</span>
+            <h4>Zero-shot Dubbing</h4>
+            <p>Given a reference speech clip, HoliDubber generates synchronized dubbing that preserves the vocal timbre and identity of the reference speaker — with no fine-tuning required.</p>
+        </div>
+        <div class="mode-box">
+            <span class="mode-icon">✍️</span>
+            <h4>Text-Prompt Guided Dubbing</h4>
+            <p>Using structured text descriptions (speaker profile, speech instruction, audio caption), HoliDubber synthesizes both speech and sound effects without any reference audio.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTRIBUTIONS -->
+<section class="fade">
+    <div class="sec-tag">Highlights</div>
+    <h2>Key Contributions</h2>
+    <div class="highlights">
+        <div class="hl-card">
+            <span class="hl-num">01</span>
+            <h4>Holistic Dubbing Framework</h4>
+            <p>The first system to unify speech and sound effect generation within a single text-guided generative process, moving beyond speech-only dubbing.</p>
+        </div>
+        <div class="hl-card">
+            <span class="hl-num">02</span>
+            <h4>Patch-based Audio-Visual Fusion</h4>
+            <p>Cross-attention mechanism that fuses patch-level visual features with audio representations for fine-grained lip synchronization.</p>
+        </div>
+        <div class="hl-card">
+            <span class="hl-num">03</span>
+            <h4>Multi-stage Training Pipeline</h4>
+            <p>From large-scale TTA pre-training to structured-prompt fine-tuning with random field dropout, enabling flexible zero-shot and text-guided modes.</p>
+        </div>
+        <div class="hl-card">
+            <span class="hl-num">04</span>
+            <h4>HoliDub-Bench</h4>
+            <p>A curated benchmark of 1,000 clips with fine-grained acoustic annotations for evaluating holistic dubbing under complex acoustic environments.</p>
+        </div>
+    </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- METHOD -->
+<section id="method" class="fade">
+    <div class="sec-tag">Approach</div>
+    <h2>Model Architecture</h2>
+    <p>HoliDubber combines a causal autoregressive transformer for global temporal modeling with a local diffusion transformer (LocDiT) for high-fidelity intra-patch synthesis, connected by patch-level audio-visual fusion.</p>
+
+    <div class="figure">
+        <img src="img/holidubber_framework.png" alt="HoliDubber Framework" loading="lazy">
+        <figcaption>
+            <strong>Figure 1.</strong> Overall framework of HoliDubber. (a) Training paradigm. (b) Inference paradigm supporting both zero-shot and text-prompt-guided modes. (c–e) Architecture details of patch-based AV-fusion, aggregation encoder, and LocDiT.
+        </figcaption>
+    </div>
+
+    <h3>Processing Pipeline</h3>
+    <div class="pipeline-steps">
+        <div class="pipe-step">
+            <span class="step-num">Step 1</span>
+            <h5>Audio Captioning</h5>
+            <p>Generate structured multi-field descriptions via Qwen3-Omni for speaker profile, speech instruction, and audio captions.</p>
+        </div>
+        <div class="pipe-step">
+            <span class="step-num">Step 2</span>
+            <h5>AV Fusion</h5>
+            <p>Patch-level cross-attention fuses video features with audio latents, attending to upcoming articulation for temporal alignment.</p>
+        </div>
+        <div class="pipe-step">
+            <span class="step-num">Step 3</span>
+            <h5>Aggregation</h5>
+            <p>Bidirectional transformer compresses fused multi-modal tokens into holistic patch embeddings via a learnable aggregation token.</p>
+        </div>
+        <div class="pipe-step">
+            <span class="step-num">Step 4</span>
+            <h5>AR + LocDiT</h5>
+            <p>Causal LM captures inter-patch structure; LocDiT synthesizes high-fidelity continuous audio tokens within each patch via flow matching.</p>
+        </div>
+    </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- DEMOS -->
+<section id="demos" class="fade">
+    <div class="sec-tag">Audio-Visual Demos</div>
+    <h2>Dubbing Samples</h2>
+    <p style="margin-bottom:1.5rem;">Each video below contains the synthesized audio. Please <strong>unmute and play</strong> to compare lip synchronization, speech quality, and acoustic scene fidelity across different methods.</p>
+
+    <!-- Demo 1: Zero-shot -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <span class="mode-tag tag-zs">Zero-shot</span>
+            <span class="demo-id">VoxCeleb2 — Sample #1</span>
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;text&gt;</span>
+            We're gonna have a lot more videos with practical advice for family members.
+        </div>
+        <div class="video-grid">
+            <div class="video-item">
+                <span class="vid-label">Ground Truth</span>
+                <video controls preload="none" poster="demos/zs1/poster_gt.jpg">
+                    <source src="demos/zs1/gt.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">AlignDiT</span>
+                <video controls preload="none" poster="demos/zs1/poster_aligndit.jpg">
+                    <source src="demos/zs1/aligndit.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">FunCineForge</span>
+                <video controls preload="none" poster="demos/zs1/poster_funcine.jpg">
+                    <source src="demos/zs1/funcineforge.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label ours">HoliDubber (Ours)</span>
+                <video controls preload="none" poster="demos/zs1/poster_ours.jpg">
+                    <source src="demos/zs1/ours.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 2: Text-prompt -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <span class="mode-tag tag-tp">Text-Prompt Guided</span>
+            <span class="demo-id">VoxCeleb2 — Sample #2</span>
+        </div>
+        <div class="prompt-fields">
+            <div class="prompt-block">
+                <span class="field">&lt;speaker_profile&gt;</span>
+                Male, adult, British accent, clear and bright voice.
+            </div>
+            <div class="prompt-block">
+                <span class="field">&lt;speech_instruct&gt;</span>
+                Earnest and encouraging, moderate pace with natural pauses, conveying empathy.
+            </div>
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;audio_caption&gt;</span>
+            Soft piano and string music, slow tempo, soothing and reflective mood.
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;text&gt;</span>
+            We're gonna have a lot more videos with practical advice for family members.
+        </div>
+        <div class="video-grid">
+            <div class="video-item">
+                <span class="vid-label">Ground Truth</span>
+                <video controls preload="none" poster="demos/tp1/poster_gt.jpg">
+                    <source src="demos/tp1/gt.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">FunCineForge</span>
+                <video controls preload="none" poster="demos/tp1/poster_funcine.jpg">
+                    <source src="demos/tp1/funcineforge.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label ours">HoliDubber (Ours)</span>
+                <video controls preload="none" poster="demos/tp1/poster_ours.jpg">
+                    <source src="demos/tp1/ours.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 3: HoliDub-Bench -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <span class="mode-tag tag-hb">HoliDub-Bench</span>
+            <span class="demo-id">Complex Acoustic Scene — Sample #1</span>
+        </div>
+        <div class="prompt-fields">
+            <div class="prompt-block">
+                <span class="field">&lt;speaker_profile&gt;</span>
+                Female, young adult, American accent, warm and friendly voice.
+            </div>
+            <div class="prompt-block">
+                <span class="field">&lt;speech_instruct&gt;</span>
+                Enthusiastic and lively, fast pace with rising intonation, conveying excitement.
+            </div>
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;audio_caption&gt;</span>
+            Crowd cheering and clapping in the background, outdoor stadium ambiance with distant music.
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;text&gt;</span>
+            This is absolutely incredible, I can't believe we're here right now!
+        </div>
+        <div class="video-grid">
+            <div class="video-item">
+                <span class="vid-label">Ground Truth</span>
+                <video controls preload="none" poster="demos/hb1/poster_gt.jpg">
+                    <source src="demos/hb1/gt.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">TTA (w/o Video)</span>
+                <video controls preload="none" poster="demos/hb1/poster_tta.jpg">
+                    <source src="demos/hb1/tta.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label ours">HoliDubber (Ours)</span>
+                <video controls preload="none" poster="demos/hb1/poster_ours.jpg">
+                    <source src="demos/hb1/ours.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 4: Zero-shot CelebV-Dub -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <span class="mode-tag tag-zs">Zero-shot</span>
+            <span class="demo-id">CelebV-Dub — Expressive Sample</span>
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;text&gt;</span>
+            I really thought we had a chance, but it just didn't work out the way we planned.
+        </div>
+        <div class="video-grid">
+            <div class="video-item">
+                <span class="vid-label">Ground Truth</span>
+                <video controls preload="none" poster="demos/zs2/poster_gt.jpg">
+                    <source src="demos/zs2/gt.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">VoiceCraft-Dub</span>
+                <video controls preload="none" poster="demos/zs2/poster_voicecraft.jpg">
+                    <source src="demos/zs2/voicecraft.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">FunCineForge</span>
+                <video controls preload="none" poster="demos/zs2/poster_funcine.jpg">
+                    <source src="demos/zs2/funcineforge.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label ours">HoliDubber (Ours)</span>
+                <video controls preload="none" poster="demos/zs2/poster_ours.jpg">
+                    <source src="demos/zs2/ours.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo 5: Text-prompt CelebV-Dub -->
+    <div class="demo-card">
+        <div class="demo-header">
+            <span class="mode-tag tag-tp">Text-Prompt Guided</span>
+            <span class="demo-id">CelebV-Dub — Emotional Sample</span>
+        </div>
+        <div class="prompt-fields">
+            <div class="prompt-block">
+                <span class="field">&lt;speaker_profile&gt;</span>
+                Male, middle-aged, deep and resonant voice.
+            </div>
+            <div class="prompt-block">
+                <span class="field">&lt;speech_instruct&gt;</span>
+                Slow and deliberate, somber tone with long pauses, conveying sadness and reflection.
+            </div>
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;audio_caption&gt;</span>
+            Quiet indoor room with faint air conditioning hum, minimal background noise.
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;text&gt;</span>
+            Sometimes you just have to accept things for what they are and move forward.
+        </div>
+        <div class="video-grid">
+            <div class="video-item">
+                <span class="vid-label">Ground Truth</span>
+                <video controls preload="none" poster="demos/tp2/poster_gt.jpg">
+                    <source src="demos/tp2/gt.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">FunCineForge</span>
+                <video controls preload="none" poster="demos/tp2/poster_funcine.jpg">
+                    <source src="demos/tp2/funcineforge.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label ours">HoliDubber (Ours)</span>
+                <video controls preload="none" poster="demos/tp2/poster_ours.jpg">
+                    <source src="demos/tp2/ours.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- CITATION -->
+<section id="citation" class="fade">
+    <div class="sec-tag">Reference</div>
+    <h2>Citation</h2>
+    <p>If you find this work useful in your research, please consider citing:</p>
+    <div class="bib">
+        <button class="copy" onclick="copyBib()">Copy</button>
+<pre>@inproceedings{anonymous2025holidubber,
+  title     = {HoliDubber: Holistic Video Dubbing for 
+               Complex Acoustic Scenes via Text-Guided 
+               Audio Synthesis},
+  author    = {Anonymous},
+  booktitle = {Proceedings of the ACM International 
+               Conference on Multimedia},
+  year      = {2026}
+}</pre>
+    </div>
+</section>
+
+<footer>
+    HoliDubber &copy; 2025 &nbsp;·&nbsp;
+    <a href="#">Paper</a> &nbsp;·&nbsp;
+    <a href="#">GitHub</a>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06 });
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+function copyBib() {
+    const t = document.querySelector('.bib pre').textContent;
+    navigator.clipboard.writeText(t).then(() => {
+        const b = document.querySelector('.bib .copy');
+        b.textContent = 'Copied!';
+        setTimeout(() => b.textContent = 'Copy', 2000);
+    });
+}
+</script>
+
+</body>
+</html>
