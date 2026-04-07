@@ -851,38 +851,84 @@
         <div class="prompt-fields">
             <div class="prompt-block">
                 <span class="field">&lt;speaker_profile&gt;</span>
-                Female, young adult, American accent, warm and friendly voice.
+                male, young adult to middle-aged, clear voice.
             </div>
             <div class="prompt-block">
                 <span class="field">&lt;speech_instruct&gt;</span>
-                Enthusiastic and lively, fast pace with rising intonation, conveying excitement.
+                 Normal speaking pace, conversational tone, sounds reflective and engaged.
             </div>
         </div>
         <div class="prompt-block">
             <span class="field">&lt;audio_caption&gt;</span>
-            Crowd cheering and clapping in the background, outdoor stadium ambiance with distant music.
+            There is no background music. The environment includes ambient crowd noise, consistent with a public or semi-public indoor setting. No distinct sound effects such as impacts, doors, or weather are present. The main voice is close and clear, with background noise slightly muffled and distant.
         </div>
         <div class="prompt-block">
             <span class="field">&lt;text&gt;</span>
-            This is absolutely incredible, I can't believe we're here right now!
+            It was earnest. It had goosebumps. It had, you know, fist pump moments. And we knew we could tap into that because we knew how it made us feel.
         </div>
         <div class="video-grid">
             <div class="video-item">
                 <span class="vid-label">Ground Truth</span>
-                <video controls preload="none" poster="demos/hb1/poster_gt.jpg">
-                    <source src="demos/hb1/gt.mp4" type="video/mp4">
+                <video controls >
+                    <source src="demos/holibench/-rjR4El7qzg_1_1_dubbed.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="video-item">
                 <span class="vid-label">TTA (w/o Video)</span>
-                <video controls preload="none" poster="demos/hb1/poster_tta.jpg">
-                    <source src="demos/hb1/tta.mp4" type="video/mp4">
+                <video controls>
+                    <source src="demos/holibench/-rjR4El7qzg_1_1_dubbed.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="video-item">
                 <span class="vid-label ours">HoliDubber (Ours)</span>
-                <video controls preload="none" poster="demos/hb1/poster_ours.jpg">
-                    <source src="demos/hb1/ours.mp4" type="video/mp4">
+                <video controls>
+                    <source src="demos/holibench/-rjR4El7qzg_1_1_dubbed.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+
+     <div class="demo-card">
+        <div class="demo-header">
+            <span class="mode-tag tag-hb">HoliDub-Bench</span>
+            <span class="demo-id">Complex Acoustic Scene — Sample #2</span>
+        </div>
+        <div class="prompt-fields">
+            <div class="prompt-block">
+                <span class="field">&lt;speaker_profile&gt;</span>
+                male, adult, likely middle-aged, has a noticeable foreign accent, possibly Spanish or Latin American. Voice is clear but slightly breathy at times 
+            </div>
+            <div class="prompt-block">
+                <span class="field">&lt;speech_instruct&gt;</span>
+                Speaking at a moderate pace with a reflective, thoughtful tone. There are pauses and hesitations, suggesting he is formulating his thoughts as he speaks. The voice is calm and expressive.
+            </div>
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;audio_caption&gt;</span>
+        No background music is present. A continuous, low-level murmur of a crowd is audible throughout, suggesting the speaker is in a public indoor space such as a museum or gallery. The ambient sound is diffuse and does not include any distinct environmental effects like footsteps, doors, or movement.
+        </div>
+        <div class="prompt-block">
+            <span class="field">&lt;text&gt;</span>
+            <text> when I visit those museums and I see the sensibility of this painter, how he describe life, how he goes to our subconscious, how he goes to our dreams world and, you know, propose.
+        </div>
+        <div class="video-grid">
+            <div class="video-item">
+                <span class="vid-label">Ground Truth</span>
+                <video controls >
+                    <source src="demos/holibench/64zLjrLz15I_7_0_1_dubbed.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label">TTA (w/o Video)</span>
+                <video controls>
+                    <source src="demos/holibench/64zLjrLz15I_7_0_1_dubbed.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="video-item">
+                <span class="vid-label ours">HoliDubber (Ours)</span>
+                <video controls>
+                    <source src="demos/holibench/64zLjrLz15I_7_0_1_dubbed.mp4" type="video/mp4">
                 </video>
             </div>
         </div>
