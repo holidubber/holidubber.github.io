@@ -1735,7 +1735,7 @@
 <script>
 const obs = new IntersectionObserver(es => {
     es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
-}, { threshold: 0.06 });
+}, { threshold: 0.01 });
 document.querySelectorAll('.fade').forEach(el => obs.observe(el));
 
 function copyBib() {
